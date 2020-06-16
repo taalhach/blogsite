@@ -6,6 +6,7 @@ use App\Blog;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BlogController extends Controller
 {
@@ -55,9 +56,11 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Blog $blog)
     {
-        //
+        if(Gate::authorize('update',$blog)){
+            return view("author.edit",compact('blog'));
+        }
     }
 
     /**
@@ -67,11 +70,15 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Blog $blog)
+    public function update(Request $request,Blog $blog)
     {
-        $blog->status=true;
-        $blog->save();
-        return back();
+        if (Gate::authorize('update',$blog)){
+            $validated=$request->validate(['title'=>'required|min:5','content'=>'required']);
+            $blog->title=$validated['title'];
+            $blog->content=$validated['content'];
+            $blog->save();
+            return redirect('/author/blog/'.$blog->id);
+        }
     }
 
 }

@@ -41,6 +41,11 @@ class AdminController extends Controller
     public function blog(Blog $blog){
         return view('admin.blog',compact('blog'));
     }
+    public function publish(Blog $blog){
+        $blog->status=true;
+        $blog->save();
+        return back();
+    }
 
     public function favourites(){
         $favourites=Blog::all();

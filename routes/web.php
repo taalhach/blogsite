@@ -29,7 +29,7 @@ Route::prefix('admin')->name('admin.')->group(function (){
 
     Route::GET('/approvals','Admin\AdminController@approvals')->name('approvals')->middleware('is_admin');
     Route::GET('/favourites','Admin\AdminController@favourites')->name('favourites')->middleware('is_admin');
-    Route::PATCH('/blog/{blog}','Blogs\BlogController@update')->name('approve_blog')->middleware('is_admin');
+    Route::PATCH('/blog/{blog}','Admin\AdminController@publish')->name('approve_blog')->middleware('is_admin');
 
 });
 Route::prefix('author')->name('author.')->group(function (){
@@ -41,7 +41,9 @@ Route::prefix('author')->name('author.')->group(function (){
     Route::POST('/favourites/{blog}/like','Author\LikesController@store')->name('like_blog')->middleware('is_author');
 
     Route::GET('/blog','Author\AuthorController@diary')->name('diary')->middleware('is_author');
+    Route::GET('/blog/{blog}/edit','Blogs\BlogController@edit')->name('edit')->middleware('is_author');
     Route::GET('/blog/{blog}','Blogs\BlogController@show')->name('show_blog')->middleware('is_author');
+    Route::PATCH('/blog/{blog}','Blogs\BlogController@update')->name('update_blog')->middleware('is_author');
     Route::POST('/blog','Blogs\BlogController@store')->name('submit_blog')->middleware('is_author');
     Route::POST('/blog/{blog}/comment','Blogs\CommentController@store')->name('comment_blog')->middleware('is_author');
 });
